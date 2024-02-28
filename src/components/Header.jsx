@@ -1,18 +1,4 @@
-// import { AppBar, Toolbar, Typography } from "@mui/material";
-
-// const Header = () => {
-//   return (
-//     <AppBar position="static">
-//       <Toolbar>
-//         <Typography variant="h6">Online Learning Platform</Typography>
-//       </Toolbar>
-//     </AppBar>
-//   );
-// };
-
-// export default Header;
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -25,6 +11,8 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
+import Courses from "../pages/Courses"; // Ajusta la ruta según la ubicación real del archivo Courses.jsx
+import { getCoursesFromFirestore } from "../api/coursesApi";
 
 const Header = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -33,6 +21,20 @@ const Header = () => {
     correo: "",
     curso: "",
   });
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      const coursesData = await getCoursesFromFirestore();
+      const formattedCourses = coursesData.map((course) => ({
+        ...course,
+        create: course.create.toDate(),
+      }));
+      setCourses(formattedCourses);
+    };
+
+    fetchCourses();
+  }, []);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -96,10 +98,11 @@ const Header = () => {
             value={formData.curso}
             onChange={handleInputChange}
           >
-            {/*cursos */}
-            <MenuItem value="curso1">Curso 1</MenuItem>
-            <MenuItem value="curso2">Curso 2</MenuItem>
-            <MenuItem value="curso3">Curso 3</MenuItem>
+            {courses.map((course) => (
+              <MenuItem key={course.id} value={course.title}>
+                {course.title}
+              </MenuItem>
+            ))}
           </TextField>
         </DialogContent>
         <DialogActions>
