@@ -20,6 +20,8 @@ const Header = () => {
     nombre: "",
     correo: "",
     curso: "",
+    instructor: "", // Nuevo campo para el instructor
+    url: "", // Nuevo campo para la URL
   });
   const [courses, setCourses] = useState([]);
 
@@ -46,10 +48,21 @@ const Header = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+  // Si el campo seleccionado es el curso, busca el curso seleccionado y actualiza los campos de instructor y URL
+  if (name === 'curso') {
+    const selectedCourse = courses.find(course => course.title === value);
     setFormData({
       ...formData,
       [name]: value,
+      instructor: selectedCourse ? selectedCourse.instructor : '',
+      url: selectedCourse ? selectedCourse.url : ''
     });
+  } else {
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  }
   };
 
   const handleSubmit = () => {
@@ -104,6 +117,24 @@ const Header = () => {
               </MenuItem>
             ))}
           </TextField>
+          <TextField
+            label="Instructor"
+            fullWidth
+            margin="dense"
+            name="instructor"
+            value={formData.instructor}
+            onChange={handleInputChange}
+            disabled={!formData.curso} // Deshabilita el campo si no se ha seleccionado un curso
+          />
+          <TextField
+            label="URL del curso"
+            fullWidth
+            margin="dense"
+            name="url"
+            value={formData.url}
+            onChange={handleInputChange}
+            disabled={!formData.curso} // Deshabilita el campo si no se ha seleccionado un curso
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary">
