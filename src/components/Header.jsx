@@ -1,14 +1,3 @@
-<<<<<<< Updated upstream
-import { AppBar, Toolbar, Typography } from "@mui/material";
-
-const Header = () => {
-  return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6">Online Learning Platform</Typography>
-      </Toolbar>
-    </AppBar>
-=======
 import React, { useState, useEffect } from "react";
 import {
   AppBar,
@@ -126,7 +115,6 @@ const Header = () => {
         </DialogActions>
       </Dialog>
     </div>
->>>>>>> Stashed changes
   );
 };
 
